@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="link2webcontent-hook" basedir="." default="deploy">
+	<import file="D:\_Projects\Liferay\liferay-plugins-sdk-6.2.0\hooks/build-common-hook.xml" />
+</project>
