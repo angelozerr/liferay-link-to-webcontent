@@ -3,7 +3,7 @@ Liferay Link To WebContent
 
 "Liferay Link To WebContent" provides the capability to write your HTML link inside a WebContent to another WebContent with this syntax : 
 
-  <a href="#" data-liferay-articleid="13502" >link to WebContent2</a>.
+  &lt;a href="#" data-liferay-articleid="13502" &gt;link to WebContent2&lt;/a&gt;
 
 This syntax avoids :
 
@@ -16,9 +16,9 @@ This Javascript add event for HTML a and check if there is some data-liferay-* a
 
 For the moment, it works with "Web Content Display" portlet.
 
-== Sample ==
+# Usage
 
-Imagine you have WebContent1 displayed in a "Web Content Display" portlet which belongs to Page2. This WebContent1 has a link to WebContent2 : 
+Imagine you have a WebContent1 displayed in a "Web Content Display" portlet which belongs to Page2. This WebContent1 has a link to WebContent2 : 
 
 ![WebContent1 link to WebContent2](https://github.com/angelozerr/liferay-link-to-webcontent/wiki/images/WebContent1InPage2.png)
 
