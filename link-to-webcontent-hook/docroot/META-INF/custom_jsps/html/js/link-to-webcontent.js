@@ -2,6 +2,7 @@ AUI().use('node', function(A) {
   (function() {
 
     var DATA_LIFERAY = 'data-liferay-';
+    var ASSET_PUBLISHER_PORTLETID = '101_INSTANCE';
 
     if (Liferay.on) {
       // Liferay 6.2
@@ -43,11 +44,12 @@ AUI().use('node', function(A) {
     };
 
     function display(portletId, attributes) {
+      var assetPublisher = isAssetPublisher(portletId);
       var renderURL = Liferay.PortletURL.createRenderURL();
       renderURL.setPortletId(portletId);
       renderURL.setPortletMode("view");
       renderURL.setWindowState("normal");
-      var plid = null, plfriendlyURL = null, groupId = null;
+      var plid = null, plfriendlyURL = null, groupId = null, articleId = null, urlTitle = null, assetEntryId = null;
       for ( var name in attributes) {
         switch (name) {
         case 'plid':
@@ -59,19 +61,52 @@ AUI().use('node', function(A) {
         case 'groupid':
           groupId = attributes[name];
           break;
+        case 'articleid':          
+          articleId = attributes[name];
+          break;
+        case 'urltitle':          
+          urlTitle = attributes[name];
+          break;
+        case 'assetentryid':          
+          assetEntryId = attributes[name];
+          break;          
         default:
-          var value = attributes[name];
-          if (name === 'articleid')
-            name = 'articleId';
           renderURL.setParameter(name, value);
         }
       }
-
+      
+      if (assetPublisher) {
+        // "Asset Publisher" portlet : urlTitle or assetEntryId is required
+        if (urlTitle) {
+          renderURL.setParameter('urlTitle', urlTitle);
+        } else if (assetEntryId) {
+          renderURL.setParameter('assetEntryId', assetEntryId);
+        } else {
+          alert('Cannot display the link, it requires data-liferay-urlTitle or data-liferay-assetEntryId');
+          return;
+        }
+        // see parameters at ROOT\html\portlet\asset_publisher\view_content.jsp
+        renderURL.setParameter('type', 'content');
+        renderURL.setParameter('struts_action', '"/asset_publisher/view_content');        
+      } else {
+        // "Web Content Display" portlet : articleId is required
+        if (articleId) {
+          
+        } else {
+          alert('Cannot display the link, it requires data-liferay-articleId');
+          return;
+        }        
+      }
+      
       if (plid || plfriendlyURL) {
         displayInPage(renderURL, plid, plfriendlyURL, groupId);
       } else {
         window.location = renderURL.toString();
       }
+    }
+
+    function isAssetPublisher(portletId) {
+      return portletId.slice(0, ASSET_PUBLISHER_PORTLETID.length) == ASSET_PUBLISHER_PORTLETID;
     }
 
     function displayInPage(renderURL, plid, plfriendlyURL, groupId) {
